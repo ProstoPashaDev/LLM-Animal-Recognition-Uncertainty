@@ -12,12 +12,11 @@ from src.services.base64_image_encoder import image_to_base64_data_uri
 #xai_controller = XAIController()
 
 image_path = "C://KhramovPavel/Project/Python/LLM-Animal-Recognition-Uncertainty/resources/animal.jpg"
-data_uri = image_to_base64_data_uri(image_path)
 
 '''
 res = xai_controller.ask_grok_with_image("What is the animal on the picture? Provide a short answer. Express your "
                                          "confidence from 0 to 100",
-                                         image(data_uri))
+                                         image_path)
 '''
 
 """
@@ -37,4 +36,4 @@ print(nll.get_avg_nll())
 
 datasets = DatasetsController()
 
-print(datasets.get_real_animals(10))
+print(datasets.get_real_animals(1))

@@ -1,4 +1,5 @@
 dotenv==0.9.9
 OpenAI==2.8.1
-xai-sdk==1.4.0
+xai-sdk==1.4.1
 numpy==2.3.5
+kagglehub==0.3.13

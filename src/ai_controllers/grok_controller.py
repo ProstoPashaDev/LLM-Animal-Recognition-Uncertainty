@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from xai_sdk import Client
 from xai_sdk.chat import user, image
 
+from src.services.base64_image_encoder import image_to_base64_data_uri
+
 load_dotenv()
 
 
@@ -24,17 +26,20 @@ class XAIController:
         response = chat.sample()
         return response.content
 
-    def ask_grok_with_image(self, prompt: str, img: image):
+    def ask_grok_with_image(self, prompt: str, image_path: str):
         """
         Send a prompt + an already constructed Image object to Grok.
 
         Args:
             prompt (str): text prompt
-            img (Image): xai_sdk.chat.Image instance
+            image_path (str): absolute path to image
         """
+        data_uri = image_to_base64_data_uri(image_path)
+        img = image(data_uri)
+
         chat = self.client.chat.create(model=self.model)
 
         chat.append(user(prompt, img))
 
         response = chat.sample()
-        return response.content, response.usage
+        return response
