@@ -27,7 +27,7 @@ class XAIController:
 
     def ask_grok_with_image(self, prompt: str, image_path: str):
         """
-        Send a prompt + an already constructed Image object to Grok.
+        Send a prompt + an image path to Grok.
 
         Args:
             prompt (str): text prompt
