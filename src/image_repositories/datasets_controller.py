@@ -2,6 +2,7 @@ import os.path
 import random
 from pathlib import Path
 
+from src.image_repositories.datasets.hand_drawn_animals import HandDrawnAnimalsDataset
 from src.image_repositories.datasets.real_animals import RealAnimalsDataset
 
 
@@ -22,3 +23,7 @@ class DatasetsController:
 
         return real_animals_dataset.get_images(random_numbers)
 
+    def get_hand_drawn_AI_animals(self):
+        hand_drawn_animals = HandDrawnAnimalsDataset()
+
+        return hand_drawn_animals.get_images()
