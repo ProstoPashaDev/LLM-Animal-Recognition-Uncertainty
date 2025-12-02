@@ -13,7 +13,6 @@ class XAIController:
 
     def __init__(self):
         key = os.getenv("XAI_API_KEY")
-        print(key)
         self.model = "grok-4-1-fast-non-reasoning"
         self.client = Client(
             api_key=key,

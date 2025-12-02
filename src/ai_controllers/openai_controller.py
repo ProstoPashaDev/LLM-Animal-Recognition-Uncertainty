@@ -19,7 +19,7 @@ class OpenAIController:
             model=self.model,
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message["content"]
+        return response
 
     def ask_gpt_with_image(self, prompt, image_path):
         """
@@ -36,4 +36,4 @@ class OpenAIController:
                 ],
                 }],
         )
-        return response.choices[0].message["content"]
+        return response
