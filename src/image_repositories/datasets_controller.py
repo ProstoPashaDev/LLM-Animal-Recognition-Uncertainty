@@ -3,6 +3,7 @@ import random
 from pathlib import Path
 
 from src.image_repositories.datasets.hand_drawn_animals import HandDrawnAnimalsDataset
+from src.image_repositories.datasets.hybrid_animals import HybridAnimalsDataset
 from src.image_repositories.datasets.random_objects import RandomObjectsDataset
 from src.image_repositories.datasets.real_animals import RealAnimalsDataset
 
@@ -39,3 +40,8 @@ class DatasetsController:
 
         return random_objects_dataset.get_images(random_numbers)
 
+
+    def get_hybrid_animals(self):
+        hybrid_animals = HybridAnimalsDataset()
+
+        return hybrid_animals.get_images()
