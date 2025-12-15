@@ -3,6 +3,7 @@ import random
 from pathlib import Path
 
 from src.image_repositories.datasets.hand_drawn_animals import HandDrawnAnimalsDataset
+from src.image_repositories.datasets.random_objects import RandomObjectsDataset
 from src.image_repositories.datasets.real_animals import RealAnimalsDataset
 
 
@@ -27,3 +28,14 @@ class DatasetsController:
         hand_drawn_animals = HandDrawnAnimalsDataset()
 
         return hand_drawn_animals.get_images()
+
+
+    def get_random_objects(self, seed):
+        random_objects_dataset = RandomObjectsDataset()
+
+        rng = random.Random(seed)
+
+        random_numbers = rng.sample(range(0, 15000), 50)
+
+        return random_objects_dataset.get_images(random_numbers)
+

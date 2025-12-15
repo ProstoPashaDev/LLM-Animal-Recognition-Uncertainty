@@ -19,6 +19,6 @@ class HandDrawnAnimalsDataset:
         images = {}
         for file_path in self.dataset_dir.glob("*.jpg"):
             name = file_path.stem
-            images[name] = file_path
+            images[name] = str(file_path)
         return images
 
