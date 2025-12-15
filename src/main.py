@@ -37,7 +37,7 @@ print(nll.get_avg_nll())
 """
 
 
-def experiment_grok(prompt, animal_dataset):
+def experiment_grok(prompt, animal_dataset, unknown=False):
     print("Grok experiment")
     print("-" * 20)
     xai_controller = XAIController()
@@ -57,7 +57,10 @@ def experiment_grok(prompt, animal_dataset):
             animal_ans = answer.split(" ")[0]
             conf = answer.split(" ")[1]
 
-        accuracy.append(1) if animal_ans == animal else accuracy.append(0)
+        if unknown:
+            animal = "Unknown"
+
+        accuracy.append(1) if animal_ans.lower() == animal.lower() else accuracy.append(0)
         print(answer + " | " + animal + " | " + str(accuracy[-1]))
         if conf[-1] == "%":
             conf = conf[:len(conf)-1:]
@@ -87,16 +90,30 @@ prompt3 = ("Which real animal is in the image? Provide a general name of the ani
            "your certainty from 0 to 100. Output your response in the following format: animal, certainty. If you are "
            "unable to identify the real animal in the image enter: unknown, certainty. Response example: lion, 95.")
 
-real_animals = datasets.get_real_animals(1208219)
+seed = 1208219
+
+#real_animals = datasets.get_real_animals(seed)
 #for key, value in real_animals.items():
     #print(key, value.split("\\")[-1])
-
-hand_drawn_animals = datasets.get_hand_drawn_AI_animals()
 
 #experiment_grok(prompt1, real_animals)
 #experiment_grok(prompt2, real_animals)
 #experiment_grok(prompt3, real_animals)
 
+hand_drawn_animals = datasets.get_hand_drawn_AI_animals()
+
 #experiment_grok(prompt1, hand_drawn_animals)
 #experiment_grok(prompt2, hand_drawn_animals)
-experiment_grok(prompt3, hand_drawn_animals)
+#experiment_grok(prompt3, hand_drawn_animals)
+
+hybrid_animals = datasets.get_hybrid_animals()
+
+#experiment_grok(prompt1, hybrid_animals, unknown=True)
+#experiment_grok(prompt2, hybrid_animals, unknown=True)
+#experiment_grok(prompt3, hybrid_animals, unknown=True)
+
+random_object = datasets.get_random_objects(seed)
+
+#experiment_grok(prompt1, random_object, unknown=True)
+#experiment_grok(prompt2, random_object, unknown=True)
+#experiment_grok(prompt3, random_object, unknown=True)
