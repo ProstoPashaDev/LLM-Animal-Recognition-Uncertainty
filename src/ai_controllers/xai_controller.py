@@ -25,7 +25,7 @@ class XAIController:
         response = chat.sample()
         return response.content
 
-    def ask_grok_with_image(self, prompt: str, image_path: str):
+    def ask_with_image(self, prompt: str, image_path: str):
         """
         Send a prompt + an image path to Grok.
 

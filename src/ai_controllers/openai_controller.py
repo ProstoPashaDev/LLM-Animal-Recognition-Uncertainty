@@ -21,7 +21,7 @@ class OpenAIController:
         )
         return response
 
-    def ask_gpt_with_image(self, prompt, image_path):
+    def ask_with_image(self, prompt, image_path):
         """
         Sends a text prompt along with an image to a multimodal LLM.
         image_path: path to the local image file
