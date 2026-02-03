@@ -40,3 +40,12 @@ class ClaudeController:
         )
         return result
 
+    def get_tokens(self, response):
+        return response.usage.input_tokens + response.usage.output_tokens
+
+    def get_text(self, response):
+        return response.content[0].text
+
+    def get_ai_name(self):
+        return "Claude"
+

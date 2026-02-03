@@ -19,12 +19,6 @@ class XAIController:
             timeout=3600  # Override default timeout with longer timeout for reasoning models
         )
 
-    def ask_grok(self, prompt):
-        chat = self.client.chat.create(model=self.model)
-        chat.append(user(prompt))
-        response = chat.sample()
-        return response.content
-
     def ask_with_image(self, prompt: str, image_path: str):
         """
         Send a prompt + an image path to Grok.
@@ -42,3 +36,12 @@ class XAIController:
 
         response = chat.sample()
         return response
+
+    def get_tokens(self, response):
+        return response.usage.total_tokens
+
+    def get_text(self, response):
+        return response.content
+
+    def get_ai_name(self):
+        return "Grok"

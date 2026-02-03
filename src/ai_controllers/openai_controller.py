@@ -37,3 +37,12 @@ class OpenAIController:
                 }],
         )
         return response
+
+    def get_tokens(self, response):
+        return response.usage.total_tokens
+
+    def get_text(self, response):
+        return response.output_text
+
+    def get_ai_name(self):
+        return "ChatGPT"

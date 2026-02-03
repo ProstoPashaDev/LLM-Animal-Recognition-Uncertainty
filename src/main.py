@@ -9,39 +9,10 @@ from src.metrics.NLL import NLL
 from src.metrics.ECE import compute_ece
 from xai_sdk.chat import image
 from src.services.base64_image_encoder import image_to_base64_data_uri
-
-"""
-#openai_controller = OpenAIController()
-#print(ai_controller.ask_gpt("Hello world!"))
-#xai_controller = XAIController()
-
-image_path = "C://KhramovPavel/Project/Python/LLM-Animal-Recognition-Uncertainty/resources/animal.jpg"
-
-'''
-res = xai_controller.ask_grok_with_image("What is the animal on the picture? Provide a short answer. Express your "
-                                         "confidence from 0 to 100",
-                                         image_path)
-'''
-
-"""
-"""
-probs = [0.98, 0.9, 0.95, 0.83, 0.6712]
-probs2 = [0.9, 0.3, 0.95, 0.83, 0.6712]
-labels = [1, 0, 1, 1, 0]   # wrong answers get penalized heavily
-
-nll = NLL()
-ece = ECE()
-
-print("ECE:", ece.compute_ece(probs, labels))
-print("NLL:", nll.compute_nll(probs))
-print("NLL2:", nll.compute_nll(probs2))
-print(nll.get_avg_nll())
-"""
-
+from src.services.text_service import find_animal_confidense, split_animal_confidence, print_image_dataset
 
 def experiment(prompt, animal_dataset, controller, unknown=False):
-    #print("Grok experiment")
-    print("Claude experiment")
+    print(controller.get_ai_name() + " experiment")
     print("-" * 20)
 
     accuracy = []
@@ -51,59 +22,22 @@ def experiment(prompt, animal_dataset, controller, unknown=False):
 
     for animal, image_path in animal_dataset.items():
         response = controller.ask_with_image(prompt, image_path)
-        #token_consumption.append(response.usage.total_tokens) #For grok
-        token_consumption.append(response.usage.input_tokens + response.usage.output_tokens)  #For Claude
-        #answer = response.content #For Grok
-        answer = response.content[0].text  #For Claude
+        token_consumption.append(controller.get_tokens(response))
+        answer = controller.get_text(response)
         answers.append(answer)
         #print("-"*20)
         #print(answer)
         #print("-"*20)
-        if answer.count("\n") > 1:
-            ans1 = answer.split("\n")[0]
-            ans2 = answer.split("\n")[-1]
-            #print(ans1, ans2)
-            if len(ans1.split(" ")) == 2:
-                answer = ans1
-            elif len(ans2.split(" ")) == 2:
-                answer = ans2
-            else:
-                dig = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}
-                l = 0
-                r = 0
-                for i in range(len(answer)):
-                    if answer[i] in dig:
-                        l = i - 2
-                        r = i
-                        while r < len(answer) and (answer[r] != " " and answer[r] != "." and answer[r] != "\n" and answer[r] != "*"):
-                            r += 1
-
-                        while l > 0 and (answer[l] != " " and answer[l] != "." and answer[l] != "\n" and answer[l] != "*"):
-                            l -= 1
-
-                        break
-
-                answer = answer[l+1:r]
-
-        #print(answer)
-        try:
-            animal_ans = answer.split(",")[0]
-            conf = answer.split(",")[1]
-        except:
-            animal_ans = answer.split(" ")[0]
-            conf = answer.split(" ")[1]
+        answer = find_animal_confidense(answer)
+        animal_ans, conf = map(split_animal_confidence(answer))
 
         if unknown:
             animal = "Unknown"
 
         accuracy.append(1) if animal_ans.lower() == animal.lower() else accuracy.append(0)
         print(answer + " | " + animal + " | " + str(accuracy[-1]))
-        if conf[-1] == "%":
-            conf = conf[:len(conf) - 1:]
-        try:
-            confidence.append(int(conf))
-        except:
-            pass
+
+        confidence.append(int(conf))
 
     print("Accuracy list:", accuracy)
     print("Confidence list:", confidence)
@@ -114,6 +48,52 @@ def experiment(prompt, animal_dataset, controller, unknown=False):
     print("Tokens consumption:", sum(token_consumption))
     print("List of answers:", answers)
     print("-" * 20)
+
+
+def experiment_grok(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object):
+    xai_controller = XAIController()
+
+    # experiment(prompt1, real_animals, xai_controller)
+    # experiment(prompt2, real_animals, xai_controller)
+    # experiment(prompt3, real_animals, xai_controller)
+
+    # experiment(prompt1, hand_drawn_animals, xai_controller)
+    # experiment(prompt2, hand_drawn_animals, xai_controller)
+    # experiment(prompt3, hand_drawn_animals, xai_controller)
+
+    # experiment(prompt1, hybrid_animals, xai_controller, unknown=True)
+    # experiment(prompt2, hybrid_animals, xai_controller, unknown=True)
+    # experiment(prompt3, hybrid_animals, xai_controller, unknown=True)
+
+    # experiment(prompt1, random_object, xai_controller, unknown=True)
+    # experiment(prompt2, random_object, xai_controller, unknown=True)
+    # experiment(prompt3, random_object, xai_controller, unknown=True)
+
+
+def experiment_claude(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object):
+    claude_controller = ClaudeController()
+
+    # experiment(prompt1, real_animals, claude_controller)
+    # experiment(prompt2, real_animals, claude_controller)
+    # experiment(prompt3, real_animals, claude_controller)
+
+    # experiment(prompt1, hand_drawn_animals, claude_controller)
+    # experiment(prompt2, hand_drawn_animals, claude_controller)
+    # experiment(prompt3, hand_drawn_animals, claude_controller)
+
+    # experiment(prompt1, hybrid_animals, claude_controller, unknown=True)
+    # experiment(prompt2, hybrid_animals, claude_controller, unknown=True)
+    # experiment(prompt3, hybrid_animals, claude_controller, unknown=True)
+
+    # experiment(prompt1, random_object, claude_controller, unknown=True)
+    # experiment(prompt2, random_object, claude_controller, unknown=True)
+    # experiment(prompt3, random_object, claude_controller, unknown=True)
+
+def experiment_chatgpt(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object):
+    open_ai_controller = OpenAIController()
+
+    experiment(prompt1, real_animals, open_ai_controller)
+
 
 
 datasets = DatasetsController()
@@ -133,45 +113,12 @@ prompt3 = ("Which real animal is in the image? Provide a general name of the ani
 seed = 1208219
 
 real_animals = datasets.get_real_animals(seed)
-#for key, value in real_animals.items():
-#print(key, value.split("\\")[-1])
-
-#experiment_grok(prompt1, real_animals)
-#experiment_grok(prompt2, real_animals)
-#experiment_grok(prompt3, real_animals)
-
-claude_controller = ClaudeController()
-
-#experiment(prompt1, real_animals, claude_controller)
-#experiment(prompt2, real_animals, claude_controller)
-#experiment(prompt3, real_animals, claude_controller)
-
 hand_drawn_animals = datasets.get_hand_drawn_AI_animals()
-
-#experiment_grok(prompt1, hand_drawn_animals)
-#experiment_grok(prompt2, hand_drawn_animals)
-#experiment_grok(prompt3, hand_drawn_animals)
-
-#experiment(prompt1, hand_drawn_animals, claude_controller)
-#experiment(prompt2, hand_drawn_animals, claude_controller)
-#experiment(prompt3, hand_drawn_animals, claude_controller)
-
 hybrid_animals = datasets.get_hybrid_animals()
-
-#experiment_grok(prompt1, hybrid_animals, unknown=True)
-#experiment_grok(prompt2, hybrid_animals, unknown=True)
-#experiment_grok(prompt3, hybrid_animals, unknown=True)
-
-#experiment(prompt1, hybrid_animals, claude_controller, unknown=True)
-#experiment(prompt2, hybrid_animals, claude_controller, unknown=True)
-experiment(prompt3, hybrid_animals, claude_controller, unknown=True)
-
 random_object = datasets.get_random_objects(seed)
 
-#experiment_grok(prompt1, random_object, unknown=True)
-#experiment_grok(prompt2, random_object, unknown=True)
-#experiment_grok(prompt3, random_object, unknown=True)
+#print_image_dataset(real_animals)
 
-#experiment(prompt1, random_object, claude_controller, unknown=True)
-#experiment(prompt2, random_object, claude_controller, unknown=True)
-#experiment(prompt3, random_object, claude_controller, unknown=True)
+# experiment_grok(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
+# experiment_claude(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
+experiment_chatgpt(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
