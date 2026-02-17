@@ -1,5 +1,5 @@
 def find_animal_confidense(answer):
-    if answer.count("\n") > 1:
+    if answer.count(" ") > 1:
         ans1 = answer.split("\n")[0]
         ans2 = answer.split("\n")[-1]
         if len(ans1.split(" ")) == 2:
@@ -28,13 +28,18 @@ def find_animal_confidense(answer):
         res = answer
     return res
 
+
 def split_animal_confidence(answer):
     try:
         animal_ans = answer.split(",")[0]
         conf = answer.split(",")[1]
     except:
         animal_ans = answer.split(" ")[0]
-        conf = answer.split(" ")[1]
+        if len(answer.split(" ")) > 1:
+            conf = answer.split(" ")[1]
+        else:
+            animal_ans = "Skip"
+            conf = "100"
 
     if conf[-1] == "%":
         conf = conf[:len(conf) - 1:]
