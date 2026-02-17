@@ -92,7 +92,21 @@ def experiment_claude(prompt1, prompt2, prompt3, real_animals, hand_drawn_animal
 def experiment_chatgpt(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object):
     open_ai_controller = OpenAIController()
 
-    experiment(prompt1, real_animals, open_ai_controller)
+    # experiment(prompt1, real_animals, open_ai_controller)
+    # experiment(prompt2, real_animals, open_ai_controller)
+    # experiment(prompt3, real_animals, open_ai_controller)
+
+    # experiment(prompt1, hand_drawn_animals, open_ai_controller)
+    # experiment(prompt2, hand_drawn_animals, open_ai_controller)
+    # experiment(prompt3, hand_drawn_animals, open_ai_controller)
+
+    # experiment(prompt1, hybrid_animals, open_ai_controller, unknown=True)
+    # experiment(prompt2, hybrid_animals, open_ai_controller, unknown=True)
+    # experiment(prompt3, hybrid_animals, open_ai_controller, unknown=True)
+
+    # experiment(prompt1, random_object, open_ai_controller, unknown=True)
+    # experiment(prompt2, random_object, open_ai_controller, unknown=True)
+    # experiment(prompt3, random_object, open_ai_controller, unknown=True)
 
 
 def experiment_gemini(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object):
@@ -108,7 +122,7 @@ def experiment_gemini(prompt1, prompt2, prompt3, real_animals, hand_drawn_animal
 
     # experiment(prompt1, hybrid_animals, gemini_controller, unknown=True)
     # experiment(prompt2, hybrid_animals, gemini_controller, unknown=True)
-    experiment(prompt3, hybrid_animals, gemini_controller, unknown=True)
+    # experiment(prompt3, hybrid_animals, gemini_controller, unknown=True)
 
     # experiment(prompt1, random_object, gemini_controller, unknown=True)
     # experiment(prompt2, random_object, gemini_controller, unknown=True)
@@ -141,6 +155,7 @@ random_object = datasets.get_random_objects(seed)
 
 # experiment_grok(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
 # experiment_claude(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
-# experiment_chatgpt(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
-experiment_gemini(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
+# experiment_gemini(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
+experiment_chatgpt(prompt1, prompt2, prompt3, real_animals, hand_drawn_animals, hybrid_animals, random_object)
+
 
